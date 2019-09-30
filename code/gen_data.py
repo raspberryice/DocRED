@@ -3,26 +3,8 @@ import os
 import json
 from nltk.tokenize import WordPunctTokenizer
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('--in_path', type = str, default =  "../data")
-parser.add_argument('--out_path', type = str, default = "prepro_data")
 
-args = parser.parse_args()
-in_path = args.in_path
-out_path = args.out_path
-case_sensitive = False
 
-char_limit = 16
-train_distant_file_name = os.path.join(in_path, 'train_distant.json')
-train_annotated_file_name = os.path.join(in_path, 'train_annotated.json')
-dev_file_name = os.path.join(in_path, 'dev.json')
-test_file_name = os.path.join(in_path, 'test.json')
-
-rel2id = json.load(open(os.path.join(out_path, 'rel2id.json'), "r"))
-id2rel = {v:u for u,v in rel2id.items()}
-json.dump(id2rel, open(os.path.join(out_path, 'id2rel.json'), "w"))
-fact_in_train = set([])
-fact_in_dev_train = set([])
 
 def init(data_file_name, rel2id, max_length = 512, is_training = True, suffix=''):
 
@@ -185,10 +167,34 @@ def init(data_file_name, rel2id, max_length = 512, is_training = True, suffix=''
 	print("Finish saving")
 
 
+if __name__ =='__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--in_path', type = str, default =  "../data")
+	parser.add_argument('--out_path', type = str, default = "prepro_data")
 
-init(train_distant_file_name, rel2id, max_length = 512, is_training = True, suffix='')
-init(train_annotated_file_name, rel2id, max_length = 512, is_training = False, suffix='_train')
-init(dev_file_name, rel2id, max_length = 512, is_training = False, suffix='_dev')
-init(test_file_name, rel2id, max_length = 512, is_training = False, suffix='_test')
+	args = parser.parse_args()
+	in_path = args.in_path
+	out_path = args.out_path
+	case_sensitive = False
+
+	char_limit = 16
+	train_distant_file_name = os.path.join(in_path, 'train_distant.json')
+	train_annotated_file_name = os.path.join(in_path, 'train_annotated.json')
+	dev_file_name = os.path.join(in_path, 'dev.json')
+	test_file_name = os.path.join(in_path, 'test.json')
+
+	rel2id = json.load(open(os.path.join(out_path, 'rel2id.json'), "r"))
+	id2rel = {v:u for u,v in rel2id.items()}
+	json.dump(id2rel, open(os.path.join(out_path, 'id2rel.json'), "w"))
+	fact_in_train = set([])
+	fact_in_dev_train = set([])
+
+
+
+
+	init(train_distant_file_name, rel2id, max_length = 512, is_training = True, suffix='')
+	init(train_annotated_file_name, rel2id, max_length = 512, is_training = False, suffix='_train')
+	init(dev_file_name, rel2id, max_length = 512, is_training = False, suffix='_dev')
+	init(test_file_name, rel2id, max_length = 512, is_training = False, suffix='_test')
 
 
